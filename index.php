@@ -49,7 +49,6 @@ if($_SESSION['user'] == NULL)
                 <table id="tableDrives" class="table table-striped">
                     <thead>
                     <tr>
-                        <th>#</th>
                         <th>Date</th>
                         <th>From</th>
                         <th>To</th>
@@ -57,9 +56,7 @@ if($_SESSION['user'] == NULL)
                         <th>Time</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr></tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
             <div role="tabpanel" class="tab-pane" id="addDrive">

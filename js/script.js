@@ -111,6 +111,8 @@ function listDrives() {
     clearMarkers();
     clearDirections();
 
+    currentMode = MODE.LIST;
+
     getDrives();
 }
 
@@ -130,28 +132,30 @@ function getDrives() {
             {
                 console.log('true');
 
+                while(tableDrives.rows.length > 1)
+                {
+                    tableDrives.deleteRow(-1);
+                }
+
                 for(var i = 0; i < tabDrives[1].length; i++)
                 {
                     var drive = tabDrives[1][i];
 
                     var row = tableDrives.insertRow(-1);
 
-                    var cell1 = row.insertCell(0);
-                    cell1.innerHTML = (i + 1);
-
-                    var cell2 = row.insertCell(1);
+                    var cell2 = row.insertCell(0);
                     cell2.innerHTML = drive.date;
 
-                    var cell3 = row.insertCell(2);
+                    var cell3 = row.insertCell(1);
                     cell3.innerHTML = drive.address1;
 
-                    var cell4 = row.insertCell(3);
+                    var cell4 = row.insertCell(2);
                     cell4.innerHTML = drive.address2;
 
-                    var cell5 = row.insertCell(4);
+                    var cell5 = row.insertCell(3);
                     cell5.innerHTML = drive.distance + ' km';
 
-                    var cell6 = row.insertCell(5);
+                    var cell6 = row.insertCell(4);
                     cell6.innerHTML = setTimeString(drive.time);
                 }
             }
@@ -194,6 +198,9 @@ function confirmAddDrive() {
             {
                 eId('addDriveLi').classList.remove('active');
                 eId('listDrivesLi').classList.add('active');
+
+                eId('addDrive').classList.remove('active');
+                eId('listDrives').classList.add('active');
 
                 listDrives();
             }
