@@ -10,13 +10,14 @@ include_once 'bdd_connect.php';
 
 if($_SESSION['user'] != NULL)
 {
-    $req = $bdd->prepare('SELECT * FROM drives ORDER BY id DESC');
-    $req->execute();
+    $req = $bdd->prepare('SELECT * FROM drives WHERE username = ? ORDER BY id DESC');
+    $req->execute(array($_SESSION['user']));
 
     $tabDrives = [];
     $i = 0;
 
     $tabDrives[0] = 'success';
+    $tabDrives[1] = [];
 
     foreach($req->fetchAll() as $drive)
     {

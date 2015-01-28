@@ -8,6 +8,8 @@ function DRIVE() {
     this.address1 = '--';
     this.address2 = '--';
 
+    this.address = [];
+
     this.distance = 0;
     this.time = 0;
 }

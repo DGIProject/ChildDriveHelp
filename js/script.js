@@ -40,11 +40,8 @@ function initialize() {
     google.maps.event.addListener(map, 'click', function(e) {
         if(currentMode == MODE.ADD)
         {
-            if(newDrive.address1 == '--' || newDrive.address2 == '--')
-            {
-                placeMarker(e.latLng, map);
-                getAddress(e.latLng);
-            }
+            placeMarker(e.latLng, map);
+            getAddress(e.latLng);
         }
     });
 
@@ -77,6 +74,38 @@ function calcRoute(originAddress, destinationAddress) {
     var request = {
         origin: originAddress,
         destination: destinationAddress,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+    directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+        }
+    });
+
+    directionsDisplay.setMap(map);
+}
+
+function calculateRoute() {
+    directionsDisplay.setMap(null);
+
+    var countWaypoints = newDrive.address.length - 2;
+    var tabWaypoints = [];
+
+    if(countWaypoints > 0)
+    {
+        for(var i = 1; i < (countWaypoints + 1); i++)
+        {
+            tabWaypoints.push({location: newDrive.address[i].location, stopover: true});
+        }
+    }
+
+    console.log('--', newDrive.address[0].location, tabWaypoints, newDrive.address[newDrive.address.length - 1].location);
+
+    var request = {
+        origin: newDrive.address[0].location,
+        destination: newDrive.address[newDrive.address.length - 1].location,
+        waypoints: tabWaypoints,
+        optimizeWaypoints: true,
         travelMode: google.maps.TravelMode.DRIVING
     };
     directionsService.route(request, function(response, status) {
@@ -255,6 +284,15 @@ function getAddress(position) {
             console.log(tabGeocode);
             console.log(tabGeocode.results[0].formatted_address);
 
+            newDrive.address.push({location: tabGeocode.results[0].formatted_address, position: position});
+
+            if(newDrive.address.length > 1)
+            {
+                clearMarkers();
+                calculateRoute();
+            }
+
+            /*
             if(newDrive.address1 == '--')
             {
                 newDrive.address1 = tabGeocode.results[0].formatted_address;
@@ -270,6 +308,7 @@ function getAddress(position) {
                 clearMarkers();
                 calcRoute(document.getElementById('address1').innerHTML, document.getElementById('address2').innerHTML);
             }
+            */
         }
     };
 
